@@ -1,6 +1,3 @@
-Certainly! Here's a basic `README.md` for your Flask application:
-
-```markdown
 # Matflow Flask Application
 
 This is a Flask-based web application for Matflow. The application integrates with various tools such as Flask-JWT-Extended, Flask-PyMongo, Flask-Bcrypt, and Celery for background processing.
