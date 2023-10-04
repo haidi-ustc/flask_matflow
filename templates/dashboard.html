@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Your Token:</h3>
+            <div class="input-group">
+                <input type="text" id="tokenField" class="form-control" readonly value="{{ session['token'] }}">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="copyToken()">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function copyToken() {
+        const tokenField = document.getElementById('tokenField');
+        tokenField.select();
+        document.execCommand('copy');
+    }
+</script>
+{% endblock %}
+
