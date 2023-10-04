@@ -15,40 +15,40 @@ This is a Flask-based web application for Matflow. The application integrates wi
 
 1. **Clone the repository**
 
-    ```bash
-    git clone https://gitee.com/haidi-hfut/flask_matflow/tree/master
-    cd flask_matflow
-    ```
+```bash
+git clone https://gitee.com/haidi-hfut/flask_matflow/tree/master
+cd flask_matflow
+```
 
 2. **Set up a virtual environment** (Optional but recommended)
 
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
 3. **Install dependencies**
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+```bash
+pip install -r requirements.txt
+```
 
 4. **Environment Variables**
 
     Before running the application, ensure you set necessary environment variables. You can do this using a `.env` file or exporting directly in your terminal.
 
-    ```env
-    SECRET_KEY=mysecretkey
-    JWT_SECRET_KEY=myjwtsecretkey
-    DEVELOPMENT_MONGO_URI=mongodb://user:password@localhost:27017/matflow
-    PRODUCTION_MONGO_URI=mongodb://user:password@localhost:27017/proddatabase
-    ```
+```env
+SECRET_KEY=mysecretkey
+JWT_SECRET_KEY=myjwtsecretkey
+DEVELOPMENT_MONGO_URI=mongodb://user:password@localhost:27017/matflow
+PRODUCTION_MONGO_URI=mongodb://user:password@localhost:27017/proddatabase
+```
 
 5. **Running the Application**
 
-    ```bash
-    python manage.py
-    ```
+```bash
+python manage.py
+```
 
     The application should be accessible at `http://0.0.0.0:1234/`
 
@@ -58,10 +58,10 @@ The application integrates with Celery for processing background tasks. Ensure y
 
 1. **Starting the Celery Worker**
 
-    ```bash
-    cd flask_matflow
-    celery -A task.celery worker --loglevel=info
-    ```
+```bash
+cd flask_matflow
+celery -A task.celery worker --loglevel=info
+```
 
 ## Directory Structure
 
