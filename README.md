@@ -88,4 +88,3 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 ```
 
-Make sure to replace placeholder URLs and credentials with actual values for your project. Adjust the README as needed based on additional features or nuances of your specific project.
