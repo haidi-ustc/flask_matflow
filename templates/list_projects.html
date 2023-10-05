@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %} Projects {% endblock %}
+
+{% block content %}
+    <!-- Content for users who are logged in -->
+    <div class="container"> <!-- Full-width container with no padding -->
+        <h3 class="mx-3 text-center">Your Projects:</h3> <!-- Added margin for spacing -->
+
+        <!-- Loop through each project and display its details using Bootstrap's card component -->
+        {% for project in projects %}
+        <div class="card mb-3 mx-3"> <!-- Added margin for spacing -->
+            <div class="card-header">
+                <h4>{{ project.title }} : {{project._id}}</h4>
+            </div>
+            <div class="card-body">
+                <p>{{ project.description }}</p>
+                <p>Created Time: {{ project.created_time }}</p>
+                <p>Ended Time: {{ project.ended_time }}</p>
+                
+                <!-- Buttons for each project -->
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editModal-{{project._id}}">Edit</a>
+                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="button" class="btn btn-danger">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Modal to edit project.dag JSON data -->
+        <div class="modal fade" id="editModal-{{project._id}}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel-{{project._id}}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel-{{project._id}}">Edit {{ project.title }} JSON Data</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea id="jsonData-{{project._id}}" class="form-control" rows="10">{{ project.dag | tojson(4) }}</textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" onclick="copyToClipboard('jsonData-{{project._id}}')">Copy</button>
+                        <button type="button" class="btn btn-success" onclick="saveEditedData('{{project._id}}', 'jsonData-{{project._id}}')">Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            var range = document.createRange();
+            range.selectNode(document.getElementById(elementId));
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+        }
+
+        function saveEditedData(projectId, elementId) {
+            var editedData = document.getElementById(elementId).value;
+            $.ajax({
+                url: "/update_project_dag",
+                type: "POST",
+                data: {
+                    project_id: projectId,
+                    dag_data: editedData
+                },
+                success: function(response) {
+                    alert(response.message);
+                }
+            });
+        }
+
+    </script>
+{% endblock %}

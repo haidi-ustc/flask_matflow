@@ -18,6 +18,7 @@ def create_app(config_name):
     app.bcrypt = Bcrypt(app)
 
     regist_blueprints(app)
+    #print(app.config)
 
     print(" * Creating Celery app...")   # Debugging print statement
     init_celery(app)

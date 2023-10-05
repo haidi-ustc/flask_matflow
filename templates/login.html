@@ -3,6 +3,8 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+<div class="account">
+
 <form action="" method="post">
     <div class="form-group">
         {{ form.name.label }}
@@ -21,5 +23,6 @@
     {{ form.csrf_token }}
     {{ form.submit(class="btn btn-primary") }}
 </form>
+</div>
 {% endblock %}
 

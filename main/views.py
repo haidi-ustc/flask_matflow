@@ -1,9 +1,14 @@
-from flask import render_template, jsonify, redirect, url_for, current_app
+import os
+import json
+import markdown
+from flask import session
+from bson import ObjectId
+from flask import render_template, jsonify, redirect, url_for, current_app, request,flash
 from flask_jwt_extended import create_access_token
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length
 from flask_wtf import FlaskForm
-from flask import session
+from datetime import datetime
 
 from main import main 
 
@@ -71,9 +76,55 @@ def dashboard():
 
 @main.route('/')
 def index():
-    if session.get("logged_in"):
-        return render_template('index.html')
-    else:
-        return redirect(url_for('main.login'))
-       
+    # Read the README.md file
+    with open(os.path.dirname(main.root_path) + '/README.md', 'r') as f:
+        content = f.read()
 
+    # Convert to HTML
+    content_html = markdown.markdown(content)
+
+    return render_template('index.html', content=content_html)
+
+@main.route('/list_projects')
+def list_projects():
+    mongo = current_app.mongo
+    projects=list(mongo.db.projects.find())
+    if session.get("logged_in"):
+        return render_template('list_projects.html',projects=projects)
+    else:
+        return redirect(url_for('main.index'))
+
+@main.route('/create_project', methods=['GET'])
+def create_project():
+    return render_template('create_project.html')
+
+@main.route('/save_project', methods=['POST'])
+def save_project():
+    mongo = current_app.mongo
+    title = request.form.get('title')
+    description = request.form.get('description')
+    dag = json.loads(request.form.get('dag'))
+    
+
+    entry = mongo.db.projects.insert_one({"title":title,
+                       "description":description,"dag":dag,
+                       "created_time":datetime.now(),"ended_time":None})
+    if entry.inserted_id:
+       flash('Project saved successfully!', 'success')
+       return redirect(url_for('main.list_projects'))
+    else:
+       flash('Project saved Failed!', 'fail')
+       return render_template('create_project.html')
+
+@main.route('/update_project_dag', methods=['POST'])
+def update_project_dag():
+    mongo = current_app.mongo
+    project_id = ObjectId(request.form.get('project_id'))
+    dag_data = json.loads(request.form.get('dag_data'))
+
+    project = mongo.db.projects.find_one({"_id": project_id})
+    if project:
+        mongo.db.projects.update_one({"_id": project_id}, {"$set": {"dag": dag_data}})
+        return jsonify({"message": "Data updated successfully!"})
+    else:
+        return jsonify({"message": "Project not found!"}), 404
