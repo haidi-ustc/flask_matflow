@@ -1,6 +1,7 @@
 import os
 
 class Config(object):
+    NAME = 'matflow'
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard_to_guess_string'
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'another_hard_to_guess_string'
 
@@ -12,6 +13,7 @@ class Config(object):
         'database': 'matflow',
         'taskmeta_collection': 'task'
     }
+    ROOT_PATH="workspace"
 
 class ServerConfig(Config):
     DEBUG = True

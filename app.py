@@ -3,14 +3,30 @@ from flask_jwt_extended import JWTManager
 from flask_pymongo import PyMongo
 from flask_bcrypt import Bcrypt
 from config import config
-from task.celery import init_celery
+from celery import Celery
 
-def create_app(config_name):
+config_name = 'server'
+config = config[config_name]
+print(" * Creating Celery app...")   # Debugging print statement
+capp = Celery(config.NAME,broker=config.CELERY_BROKER_URL,
+              backend=config.CELERY_RESULT_BACKEND,
+              include = ["task.tasks"],
+              broker_connection_retry_on_startup=True,
+              ROOT_PATH=config.ROOT_PATH)
+
+def create_app_mongo():
+    print(" * Creating Flask-Mongo app...")   # Debugging print statement
+    app = Flask(config.NAME)
+    app.config.from_object(config)
+    app.mongo = PyMongo(app)
+    return app
+
+def create_app():
 
     print(" * Creating Flask app...")   # Debugging print statement
-    app = Flask('matflow')
+    app = Flask(config.NAME)
 
-    app.config.from_object(config[config_name])
+    app.config.from_object(config)
 
     # Set up utilities on app
     app.mongo = PyMongo(app)
@@ -18,14 +34,9 @@ def create_app(config_name):
     app.bcrypt = Bcrypt(app)
 
     regist_blueprints(app)
-    #print(app.config)
 
-    print(" * Creating Celery app...")   # Debugging print statement
-    init_celery(app)
-    #celery_app.conf.update(app.config)
     
     return app
-
 
 def regist_blueprints(app):
 

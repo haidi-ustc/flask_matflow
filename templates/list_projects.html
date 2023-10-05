@@ -15,12 +15,13 @@
             </div>
             <div class="card-body">
                 <p>{{ project.description }}</p>
+                <p>Status: {{ project.status }}</p>
                 <p>Created Time: {{ project.created_time }}</p>
                 <p>Ended Time: {{ project.ended_time }}</p>
                 
                 <!-- Buttons for each project -->
                 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editModal-{{project._id}}">Edit</a>
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="button" class="btn btn-success" onclick="submitTaskViaID('{{project._id}}' )">Submit</button>
                 <button type="button" class="btn btn-danger">Cancel</button>
             </div>
         </div>
@@ -59,13 +60,13 @@
             window.getSelection().removeAllRanges();
         }
 
-        function saveEditedData(projectId, elementId) {
+        function saveEditedData(project_id, elementId) {
             var editedData = document.getElementById(elementId).value;
             $.ajax({
                 url: "/update_project_dag",
                 type: "POST",
                 data: {
-                    project_id: projectId,
+                    project_id: project_id,
                     dag_data: editedData
                 },
                 success: function(response) {
@@ -74,5 +75,17 @@
             });
         }
 
+        function submitTaskViaID(project_id) {
+            $.ajax({
+                url: "/task/submit",
+                type: "POST",
+                data: {
+                    project_id: project_id,
+                },
+                success: function(response) {
+                    alert(response.task_id);
+                }
+            });
+        }
     </script>
 {% endblock %}
