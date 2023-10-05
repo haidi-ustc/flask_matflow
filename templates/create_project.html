@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Create New Project</h2>
-    <form action="{{ url_for('main.save_project') }}" method="post"> 
+    <form action="{{ url_for('main.save_project') }}" method="post" enctype="multipart/form-data"> 
         <div class="form-group">
             <label for="title">Title:</label>
             <input type="text" class="form-control" id="title" name="title" required>
@@ -16,10 +16,27 @@
         </div>
         <div class="form-group">
             <label for="dag">DAG (JSON format):</label>
-            <textarea class="form-control" id="dag" name="dag" rows="10" required></textarea>
+            <textarea class="form-control" id="dag" name="dag" rows="10"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="dagFile">Or upload DAG file:</label>
+            <input type="file" class="form-control-file" id="dagFile" name="dagFile" accept=".json" onchange="displayFileContent(this)">
         </div>
         <button type="submit" class="btn btn-primary">Create Project</button>
     </form>
 </div>
+
+<script>
+    function displayFileContent(input) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('dag').value = e.target.result;
+            }
+            reader.readAsText(file);
+        }
+    }
+</script>
 {% endblock %}
 

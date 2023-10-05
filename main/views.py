@@ -18,7 +18,7 @@ class LoginForm(FlaskForm):
                                                  Length(max=10, min=3, message='name should be 3-10 lengths')])
     password = PasswordField(label='Password', validators=[DataRequired('cannot be null'), Length(max=10, min=3,
                                                                                                   message='passwd should be 3-10 lengths')])
-    submit = SubmitField(label='submit')
+    submit = SubmitField(label='Login')
 
 class RegistrationForm(FlaskForm):
     username = StringField(label='Username', validators=[DataRequired('cannot be null'),
@@ -88,7 +88,7 @@ def index():
 @main.route('/list_projects')
 def list_projects():
     mongo = current_app.mongo
-    projects=list(mongo.db.projects.find())
+    projects=list(mongo.db.projects.find().sort("created_time", -1))
     if session.get("logged_in"):
         return render_template('list_projects.html',projects=projects)
     else:
@@ -96,15 +96,22 @@ def list_projects():
 
 @main.route('/create_project', methods=['GET'])
 def create_project():
-    return render_template('create_project.html')
+    if session.get("logged_in"):
+       return render_template('create_project.html')
+    else:
+        return redirect(url_for('main.index'))
 
 @main.route('/save_project', methods=['POST'])
 def save_project():
     mongo = current_app.mongo
     title = request.form.get('title')
     description = request.form.get('description')
-    dag = json.loads(request.form.get('dag'))
-    
+    if 'dagFile' in request.files and request.files['dagFile'].filename != '':
+        dag_file = request.files['dagFile']
+        dag_str = dag_file.read().decode('utf-8')
+    else:
+        dag_str = request.form.get('dag')
+    dag = json.loads(dag_str)
 
     entry = mongo.db.projects.insert_one({"title":title,
                        "description":description,"dag":dag,
