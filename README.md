@@ -4,9 +4,10 @@ This is a Flask-based web application for Matflow. The application integrates wi
 
 ## Prerequisites
 
-- Python 3.x
-- MongoDB
-- Redis (for Celery)
+- Python 3.9
+- MongoDB 5.0.8
+- Redis (for Celery) 3.2.12 
+- Celery v5.3.4
 
 ## Setup & Installation
 

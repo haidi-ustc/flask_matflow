@@ -13,7 +13,8 @@ from celery import Celery
 logger = get_task_logger(__name__)
 capp = Celery('matflow',broker="redis://localhost:6379/0",
               backend="redis://localhost:6379/0",
-              inclue = ["task.test"])
+              inclue = ["task.test"],
+              broker_connection_retry_on_startup=True)
 def init_celery(app):
 
     capp.config_from_object(app.config)
