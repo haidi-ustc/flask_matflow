@@ -11,6 +11,23 @@ This is a Flask-based web application for Matflow. The application integrates wi
 
 ## Setup & Installation
 
+### Using Docker
+
+1. **Building and Running with Docker**
+
+    Navigate to the `docker/` directory and use the provided scripts and configurations:
+
+    ```bash
+    cd docker
+    docker-compose up -d
+    ```
+    The application should be accessible at `http://0.0.0.0:5000/`
+
+    This will use `docker-compose.yml` to orchestrate the application's services.
+
+### Manually
+
+
 1. **Clone the repository**
 
 ```bash
@@ -48,7 +65,7 @@ PRODUCTION_MONGO_URI=mongodb://user:password@localhost:27017/proddatabase
 python manage.py
 ```
 
-    The application should be accessible at `http://0.0.0.0:1234/`
+    The application should be accessible at `http://0.0.0.0:5000/`
 
 ## Using Celery for Background Tasks
 

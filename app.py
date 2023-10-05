@@ -5,7 +5,7 @@ from flask_bcrypt import Bcrypt
 from config import config
 from celery import Celery
 
-config_name = 'server'
+config_name = 'docker'
 config = config[config_name]
 print(" * Creating Celery app...")   # Debugging print statement
 capp = Celery(config.NAME,broker=config.CELERY_BROKER_URL,
