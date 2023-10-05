@@ -20,9 +20,10 @@
                 <p>Ended Time: {{ project.ended_time }}</p>
                 
                 <!-- Buttons for each project -->
-                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#editModal-{{project._id}}">Edit</a>
-                <button type="button" class="btn btn-success" onclick="submitTaskViaID('{{project._id}}' )">Submit</button>
-                <button type="button" class="btn btn-danger">Cancel</button>
+                <a href="#" class="btn btn-primary" id="edit-{{project._id}}"  data-toggle="modal" data-target="#editModal-{{project._id}}">Edit</a>
+                <button type="button" id="submit-{{project._id}}" class="btn btn-success" onclick="submitTaskViaID('{{project._id}}' )">Submit</button>
+                <button type="button" class="btn btn-danger" onclick="cancelTask('{{project._id}}')">Cancel</button>
+
             </div>
         </div>
 
@@ -84,8 +85,26 @@
                 },
                 success: function(response) {
                     alert(response.task_id);
+                    document.getElementById('submit-'+project_id).classList.add('hidden');
+                    document.getElementById('edit-'+project_id).classList.add('hidden');
                 }
             });
         }
+        function cancelTask(project_id) {
+            // Hide running buttons and show initial buttons
+            $.ajax({
+                url: "/task/cancel",
+                type: "POST",
+                data: {
+                    project_id: project_id,
+                },
+                success: function(response) {
+                    alert(response.message);
+                    document.getElementById('submit-'+project_id).classList.remove('hidden');
+                    document.getElementById('edit-'+project_id).classList.remove('hidden');
+                }
+            });
+        }
+
     </script>
 {% endblock %}

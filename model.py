@@ -16,7 +16,8 @@ class ProjectDatabase:
             "created_time": datetime.now(),
             "ended_time": None,  # Set to None during initialization
             "dag": dag,
-            "status": "pending"
+            "status": "pending",
+            "celery_id":None
         }
         result = self.collection.insert_one(project)
         return result.inserted_id
@@ -25,9 +26,17 @@ class ProjectDatabase:
         project_id = ObjectId(project_id)
         return self.collection.find_one({"_id": project_id})
 
+    def get_celery_id(self, project_id):
+        project_id = ObjectId(project_id)
+        return self.collection.find_one({"_id": project_id},{"celery_id":1})
+
     def update_project_status(self, project_id, status):
         project_id = ObjectId(project_id)
         self.collection.update_one({"_id": project_id}, {"$set": {"status": status}})
+
+    def update_project_celery_id(self, project_id, celery_id):
+        project_id = ObjectId(project_id)
+        self.collection.update_one({"_id": project_id}, {"$set": {"celery_id": celery_id}})
 
     def update_project_dag(self, project_id, dag_data):
         project_id = ObjectId(project_id)
