@@ -2,11 +2,10 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_pymongo import PyMongo
 from flask_bcrypt import Bcrypt
-from config import config
+from config import config,CONFIG_NAME
 from celery import Celery
 
-config_name = 'docker'
-config = config[config_name]
+config = config[CONFIG_NAME]
 print(" * Creating Celery app...")   # Debugging print statement
 capp = Celery(config.NAME,broker=config.CELERY_BROKER_URL,
               backend=config.CELERY_RESULT_BACKEND,

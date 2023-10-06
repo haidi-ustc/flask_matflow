@@ -1,5 +1,7 @@
 import os
 
+CONFIG_NAME = 'server'
+
 class Config(object):
     NAME = 'matflow'
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard_to_guess_string'
