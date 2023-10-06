@@ -126,6 +126,7 @@ Thumbs.db
 *.swo
 *.orig
 
-
+# for develop
 venv
-workspace/*
+workspace
+data

@@ -19,7 +19,8 @@ This is a Flask-based web application for Matflow. The application integrates wi
 
     ```bash
     cd docker
-    docker-compose up -d
+    sh generate_compose.sh  # generate the docker-compose.yml with UID and GID
+    docker-compose up 
     ```
     The application should be accessible at `http://0.0.0.0:5000/`
 
