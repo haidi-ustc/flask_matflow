@@ -75,7 +75,7 @@ The application integrates with Celery for processing background tasks. Ensure y
 
 ```bash
 cd flask_matflow
-celery -A task.celery worker --loglevel=info
+celery -A app worker --loglevel=info
 ```
 
 ## Directory Structure

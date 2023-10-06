@@ -20,7 +20,7 @@ RUN pip install --upgrade pip \
     && pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # Copy only necessary files to container (modify this as per your needs)
-COPY ../ /flask_matflow/
+COPY . /flask_matflow/
 
 
 # Specify the command to run on container start
