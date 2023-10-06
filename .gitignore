@@ -130,3 +130,4 @@ Thumbs.db
 venv
 workspace
 data
+docker/docker-compose.yml

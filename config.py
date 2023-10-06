@@ -1,6 +1,6 @@
 import os
 
-CONFIG_NAME = 'docker'
+CONFIG_NAME = 'server'
 
 class Config(object):
     NAME = 'matflow'

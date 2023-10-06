@@ -14,9 +14,9 @@ from task import task
 def submit():
     pdb=ProjectDatabase()
     project_id = request.form.get('project_id')
-    project = pdb.get_project(project_id)
-    project = jsanitize(project)
-    task = processing.apply_async((project,))
+    #project = pdb.get_project(project_id)
+    #project = jsanitize(project)
+    task = processing.apply_async((project_id,))
     pdb.update_project_celery_id(project_id, task.id)
     return jsonify({'task_id': task.id}), 202
 

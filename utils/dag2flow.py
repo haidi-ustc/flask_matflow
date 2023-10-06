@@ -9,7 +9,9 @@ from pydantic import BaseModel
 from typing import List, Dict, Union, IO
 from monty.serialization import loadfn, dumpfn
 from monty.json import MSONable
-from utils import jsanitize
+
+# relative import for flask project
+from utils.utils import jsanitize
 
 
 class Dag2Flow(MSONable):
@@ -326,14 +328,14 @@ class Dag2Flow(MSONable):
         return [f"d=Dag('{dag_name}')\nd.define({{{define_str}}})"] 
 
     @classmethod
-    def get_script(cls, filename, workflow='lightflow', output_file='output.py', **kwargs):
+    def get_script(cls, input_data, workflow='lightflow', output_file='output.py', **kwargs):
         """
         Returns a single string that defines the workflow tasks and their dependencies
         based on the DAG created by the Dag2Flow object, and also defines each node
         in the workflow as a task.
 
         Args:
-            filename (str): The name of the JSON file containing the DAG data.
+            input_data (Union[str, Dict]): Either the name of the JSON file containing
             workflow (str): The workflow platform to generate the script for.
                             Either 'lightflow' or 'airflow'.
             output_file (str): The name of the file to write the output to.
@@ -344,8 +346,7 @@ class Dag2Flow(MSONable):
                  also defines each node in the workflow as a task.
 
         """
-        prefix="""
-import os
+        prefix="""import os
 import time
 from lightflow.logger import get_logger
 from lightflow.models import Dag, DataStoreDocumentSection
@@ -366,7 +367,7 @@ filename = os.path.basename(__file__)
 print(filename)
 
 """
-        wf = cls(filename, **kwargs)
+        wf = cls(input_data, **kwargs)
         if workflow == 'lightflow':
             script = prefix+wf.get_nodes_event() + "\n" + "\n".join(wf.get_lightflow_dependencies())
         elif workflow == 'airflow':
@@ -383,7 +384,7 @@ print(filename)
         return script
 
 def main():
-    script=Dag2Flow.get_script('workflow.json',include_hash=True) 
+    Dag2Flow.get_script('workflow.json',include_hash=True) 
         
 if __name__ == "__main__":
     script=Dag2Flow.get_script('../assets/workflow.json',include_hash=True) 

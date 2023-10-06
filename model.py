@@ -28,7 +28,7 @@ class ProjectDatabase:
 
     def get_celery_id(self, project_id):
         project_id = ObjectId(project_id)
-        return self.collection.find_one({"_id": project_id},{"celery_id":1})
+        return self.collection.find_one({"_id": project_id},{"_id":0, "celery_id":1})
 
     def update_project_status(self, project_id, status):
         project_id = ObjectId(project_id)
@@ -41,6 +41,10 @@ class ProjectDatabase:
     def update_project_dag(self, project_id, dag_data):
         project_id = ObjectId(project_id)
         self.collection.update_one({"_id": project_id}, {"$set": {"dag": dag_data}})
+
+    def get_project_dag(self, project_id):
+        project_id = ObjectId(project_id)
+        return self.collection.find_one({"_id": project_id},{"_id":0, "dag":1})
 
     def delete_project(self, project_id):
         project_id = ObjectId(project_id)
